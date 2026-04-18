@@ -77,7 +77,10 @@ SBF_OUT_DIR="./zig/zig-out/lib" cargo test
 This repo also includes comparison builds for a subset of Zig programs using:
 
 - stock Zig 0.16
-- `solana-program-sdk-zig` pinned as a git dependency at commit `daa4315e95c95bb8aa22ae194f1e90b975bd9d2c`
+- `solana-program-sdk-zig` pinned to the `solana-zig-fork-0.16` branch
+  (commit `5b74dc78948d68640aa21d62d882d6c4b0e23af8`); that SDK exposes
+  both `buildProgram` (solana-zig fork path) and `buildProgramElf2sbpf`
+  (stock Zig path) — these dirs use the latter
 - `elf2sbpf` as the final ELF `.o` → Solana `.so` post-processor
 
 Currently wired programs:
@@ -138,6 +141,34 @@ The CU columns labeled "Zig (stock Zig + elf2sbpf `--peephole`)"
 below show the numbers measured with this wrapper. See
 [`DaviRain-Su/elf2sbpf`](https://github.com/DaviRain-Su/elf2sbpf)
 §D.7.10 for the full design and scope.
+
+#### Using a modern Zig 0.16 with `solana-zig` baseline CU
+
+The `solana-zig` tarball fetched by `install-solana-zig.sh` is the
+officially-published Zig 0.13-based build that pins `joncinque/llvm-project-solana`.
+If you instead want a **modern Zig 0.16 language** while still hitting
+the same optimal CU numbers as the `Zig` column above, there's a WIP
+fork of `solana-zig-bootstrap` that ports Zig forward to
+`0.16.0-dev.0+cf5f8113c` against the same LLVM 20 fork:
+
+```console
+git clone -b solana-1.52-zig0.16 \
+  https://github.com/DaviRain-Su/solana-zig-bootstrap \
+  ../solana-zig-bootstrap
+cd ../solana-zig-bootstrap
+git submodule update --init --recursive
+./build native-macos-none baseline   # or native-linux-musl baseline
+```
+
+Then run `test-zig.sh` with the `ZIG` env var pointing at the fork:
+
+```console
+ZIG=../solana-zig-bootstrap/out-smoke/host/bin/zig ./test-zig.sh token
+```
+
+CU numbers are identical to the `Zig` column — the fork's output goes
+through the same SBF LLVM target; only the Zig compiler frontend
+language level changes.
 
 ### C
 
