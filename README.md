@@ -252,6 +252,7 @@ Logs a static string using the `sol_log_` syscall.
 | --- | --- |
 | Rust | 105 |
 | Zig | 105 |
+| Zig (solana-zig-fork-0.16) | 105 |
 | Zig (stock Zig + elf2sbpf framework) | 105 |
 | Zig (stock Zig + elf2sbpf `--peephole`) | 105 |
 | C | 105 |
@@ -270,6 +271,7 @@ a little-endian u64 in instruction data.
 | --- | --- |
 | Rust | 459 |
 | Zig | 37 |
+| Zig (solana-zig-fork-0.16) | 37 |
 | Zig (stock Zig + elf2sbpf framework) | 60 |
 | Zig (stock Zig + elf2sbpf `--peephole`) | 39 |
 | C | 104 |
@@ -291,6 +293,7 @@ address and `invoke_signed` to CPI to the system program.
 | --- | --- | --- |
 | Rust | 3698 | 1198 |
 | Zig | 2967 | 309 |
+| Zig (solana-zig-fork-0.16) | 2967 | 309 |
 | Zig (stock Zig + elf2sbpf framework) | 2818 | 318 |
 | Zig (stock Zig + elf2sbpf `--peephole`) | 2818 | 318 |
 | C | 3122 | 622 |
@@ -309,6 +312,7 @@ on-chain programs, but it can be expensive.
 | --- | --- |
 | Rust | 14 |
 | Zig | 15 |
+| Zig (solana-zig-fork-0.16) | 15 |
 | Zig (stock Zig + elf2sbpf framework) | 187 |
 | Zig (stock Zig + elf2sbpf `--peephole`) | 19 |
 
@@ -324,6 +328,7 @@ program.
 | --- | --- |
 | Rust | 1115 |
 | Zig | 142 |
+| Zig (solana-zig-fork-0.16) | 142 |
 | Zig (stock Zig + elf2sbpf framework) | 516 |
 | Zig (stock Zig + elf2sbpf `--peephole`) | 348 |
 
@@ -333,6 +338,7 @@ program.
 | --- | --- |
 | Rust | 2071 |
 | Zig | 158 |
+| Zig (solana-zig-fork-0.16) | 158 |
 | Zig (stock Zig + elf2sbpf framework) | 491 |
 | Zig (stock Zig + elf2sbpf `--peephole`) | 365 |
 
@@ -342,6 +348,7 @@ program.
 | --- | --- |
 | Rust | 2189 |
 | Zig | 133 |
+| Zig (solana-zig-fork-0.16) | 133 |
 | Zig (stock Zig + elf2sbpf framework) | 448 |
 | Zig (stock Zig + elf2sbpf `--peephole`) | 364 |
 
@@ -351,6 +358,7 @@ program.
 | --- | --- |
 | Rust | 2208 |
 | Zig | 124 |
+| Zig (solana-zig-fork-0.16) | 124 |
 | Zig (stock Zig + elf2sbpf framework) | 572 |
 | Zig (stock Zig + elf2sbpf `--peephole`) | 486 |
 
@@ -360,6 +368,7 @@ program.
 | --- | --- |
 | Rust | 2045 |
 | Zig | 123 |
+| Zig (solana-zig-fork-0.16) | 123 |
 | Zig (stock Zig + elf2sbpf framework) | 452 |
 | Zig (stock Zig + elf2sbpf `--peephole`) | 280 |
 
@@ -369,5 +378,6 @@ program.
 | --- | --- |
 | Rust | 1483 |
 | Zig | 114 |
+| Zig (solana-zig-fork-0.16) | 114 |
 | Zig (stock Zig + elf2sbpf framework) | 236 |
 | Zig (stock Zig + elf2sbpf `--peephole`) | 194 |
