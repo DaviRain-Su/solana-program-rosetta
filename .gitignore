@@ -1,6 +1,7 @@
 target/
 .zig-cache/
 zig-out/
+zig-pkg/
 solana-llvm/
 solana-zig/
 solana-c-sdk/

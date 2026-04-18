@@ -1,0 +1,19 @@
+.{
+    .fingerprint = 0x287c441fb0ddbc53,
+    .name = .rosetta_transfer_elf2sbpf,
+    .version = "0.1.0",
+    .minimum_zig_version = "0.16.0",
+    .dependencies = .{
+        .solana_program_sdk = .{
+            .url = "git+https://github.com/DaviRain-Su/solana-program-sdk-zig.git#daa4315e95c95bb8aa22ae194f1e90b975bd9d2c",
+            .hash = "solana_program_sdk-0.17.1-wGj9UFDjAAAmXZXTh-xPT8QpmFtAE2LcsxDiLN35dgSO",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "main.zig",
+        "../../LICENSE",
+        "../../README.md",
+    },
+}

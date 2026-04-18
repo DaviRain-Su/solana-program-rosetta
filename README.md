@@ -39,6 +39,8 @@ cargo test-sbf
 
 ### Zig
 
+#### Original `solana-zig` path
+
 * Get the compiler
 
 ```console
@@ -69,6 +71,41 @@ SBF_OUT_DIR="./zig/zig-out/lib" cargo test
 ```console
 ./test-zig.sh helloworld
 ```
+
+#### Stock Zig + `elf2sbpf` comparison path
+
+This repo also includes comparison builds for a subset of Zig programs using:
+
+- stock Zig 0.16
+- `solana-program-sdk-zig` pinned as a git dependency at commit `daa4315e95c95bb8aa22ae194f1e90b975bd9d2c`
+- `elf2sbpf` as the final ELF `.o` → Solana `.so` post-processor
+
+Currently wired programs:
+
+- `helloworld`
+- `pubkey`
+- `transfer-lamports`
+
+Expected local tool setup:
+
+```text
+../elf2sbpf
+```
+
+The Zig package dependency on `solana-program-sdk-zig` is fetched automatically
+from GitHub; only the `elf2sbpf` binary itself is expected locally by default
+unless you set `ELF2SBPF_BIN` explicitly.
+
+Then run:
+
+```console
+./test-zig-elf2sbpf.sh helloworld
+./test-zig-elf2sbpf.sh pubkey
+./test-zig-elf2sbpf.sh transfer-lamports
+```
+
+These tests reuse each program's existing Rust functional tests, so the output
+logs show the consumed compute units for the `elf2sbpf`-built variant as well.
 
 ### C
 
@@ -152,6 +189,7 @@ Logs a static string using the `sol_log_` syscall.
 | --- | --- |
 | Rust | 105 |
 | Zig | 105 |
+| Zig (stock Zig + elf2sbpf framework) | 105 |
 | C | 105 |
 | Assembly | 104 |
 
@@ -168,6 +206,7 @@ a little-endian u64 in instruction data.
 | --- | --- |
 | Rust | 459 |
 | Zig | 37 |
+| Zig (stock Zig + elf2sbpf framework) | 60 |
 | C | 104 |
 | Assembly | 30 |
 | Rust (pinocchio) | 27 |
@@ -203,6 +242,7 @@ on-chain programs, but it can be expensive.
 | --- | --- |
 | Rust | 14 |
 | Zig | 15 |
+| Zig (stock Zig + elf2sbpf framework) | 187 |
 
 ### Token
 

@@ -49,6 +49,59 @@ jobs:
     - name: Build and test program
       run: ./test-zig.sh ${{ matrix.program }}
 
+  zig-elf2sbpf-test:
+    name: Run tests against Zig + elf2sbpf implementations
+    strategy:
+      matrix:
+        program: [helloworld, transfer-lamports, pubkey]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        path: solana-program-rosetta
+
+    - uses: actions/checkout@v4
+      with:
+        repository: DaviRain-Su/elf2sbpf
+        path: elf2sbpf
+
+    - uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          ~/.cache/solana
+          ~/.cache/zig
+        key: zig-elf2sbpf-${{ hashFiles('solana-program-rosetta/Cargo.lock') }}
+
+    - name: Setup Zig 0.16.0
+      uses: mlugg/setup-zig@v2
+      with:
+        version: 0.16.0
+
+    - name: zig version
+      run: zig version
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@master
+      with:
+        toolchain: 1.81.0
+
+    - name: Install build deps
+      working-directory: solana-program-rosetta
+      run: ./install-rust-build-deps.sh
+
+    - name: Build elf2sbpf
+      working-directory: elf2sbpf
+      run: zig build
+
+    - name: Build and test program
+      working-directory: solana-program-rosetta
+      env:
+        ELF2SBPF_BIN: ${{ github.workspace }}/elf2sbpf/zig-out/bin/elf2sbpf
+      run: ./test-zig-elf2sbpf.sh ${{ matrix.program }}
+
   rust-test:
     name: Run tests against Rust implementations
     strategy:
