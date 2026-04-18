@@ -53,7 +53,7 @@ jobs:
     name: Run tests against Zig + elf2sbpf implementations
     strategy:
       matrix:
-        program: [helloworld, transfer-lamports, pubkey]
+        program: [helloworld, transfer-lamports, cpi, pubkey, token]
       fail-fast: false
     runs-on: ubuntu-latest
     steps:

@@ -85,6 +85,8 @@ Currently wired programs:
 - `helloworld`
 - `pubkey`
 - `transfer-lamports`
+- `cpi`
+- `token`
 
 Expected local tool setup:
 
@@ -102,10 +104,13 @@ Then run:
 ./test-zig-elf2sbpf.sh helloworld
 ./test-zig-elf2sbpf.sh pubkey
 ./test-zig-elf2sbpf.sh transfer-lamports
+./test-zig-elf2sbpf.sh cpi
+./test-zig-elf2sbpf.sh token
 ```
 
-These tests reuse each program's existing Rust functional tests, so the output
-logs show the consumed compute units for the `elf2sbpf`-built variant as well.
+These tests reuse each program's existing Rust functional tests. For `token`,
+the per-instruction CU numbers below were re-checked with the existing
+`assert_instruction_count` integration tests.
 
 ### C
 
@@ -226,6 +231,7 @@ address and `invoke_signed` to CPI to the system program.
 | --- | --- | --- |
 | Rust | 3698 | 1198 |
 | Zig | 2967 | 309 |
+| Zig (stock Zig + elf2sbpf framework) | 2818 | 318 |
 | C | 3122 | 622 |
 | Rust (pinocchio) | 2771 | 271 |
 
@@ -256,6 +262,7 @@ program.
 | --- | --- |
 | Rust | 1115 |
 | Zig | 142 |
+| Zig (stock Zig + elf2sbpf framework) | 516 |
 
   * Initialize Account
 
@@ -263,6 +270,7 @@ program.
 | --- | --- |
 | Rust | 2071 |
 | Zig | 158 |
+| Zig (stock Zig + elf2sbpf framework) | 491 |
 
   * Mint To
 
@@ -270,6 +278,7 @@ program.
 | --- | --- |
 | Rust | 2189 |
 | Zig | 133 |
+| Zig (stock Zig + elf2sbpf framework) | 448 |
 
   * Transfer
 
@@ -277,6 +286,7 @@ program.
 | --- | --- |
 | Rust | 2208 |
 | Zig | 124 |
+| Zig (stock Zig + elf2sbpf framework) | 572 |
 
   * Burn
 
@@ -284,6 +294,7 @@ program.
 | --- | --- |
 | Rust | 2045 |
 | Zig | 123 |
+| Zig (stock Zig + elf2sbpf framework) | 452 |
 
   * Close Account
 
@@ -291,3 +302,4 @@ program.
 | --- | --- |
 | Rust | 1483 |
 | Zig | 114 |
+| Zig (stock Zig + elf2sbpf framework) | 236 |
