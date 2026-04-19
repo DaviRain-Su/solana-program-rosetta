@@ -115,32 +115,15 @@ These tests reuse each program's existing Rust functional tests. For `token`,
 the per-instruction CU numbers below were re-checked with the existing
 `assert_instruction_count` integration tests.
 
-##### Enabling the `--peephole` optimizer
+Earlier versions of elf2sbpf shipped an opt-in `--peephole` pass that
+rewrote byte-wise `load/store i64 align 1` expansions back to
+`ldxdw`/`stxdw`. It was rolled back 2026-04-19 (miscompile on
+zignocchio escrow); if you see old `Zig (stock Zig + elf2sbpf
+--peephole)` CU numbers around, they are historical and not
+reproducible from current elf2sbpf.
 
-`elf2sbpf` ≥ D.7.10 ships an opt-in bytecode-level peephole pass
-(`--peephole` flag) that recovers most of the CU gap between stock
-Zig and `solana-zig` by collapsing `bpfel -O2`'s byte-wise `load/store
-i64 align 1` expansions back into single `ldxdw`/`stxdw` instructions.
-The flag is **off by default** — output is then byte-identical to
-`reference-shim`. Because `test-zig-elf2sbpf.sh` calls `elf2sbpf` via
-the SDK's `build.zig` (which doesn't know about the flag), the
-easiest way to enable it for a full cargo-test run is to point
-`ELF2SBPF_BIN` at a wrapper script:
-
-```console
-cat > /tmp/elf2sbpf-peephole.sh <<'EOF'
-#!/usr/bin/env bash
-exec /path/to/elf2sbpf --peephole "$@"
-EOF
-chmod +x /tmp/elf2sbpf-peephole.sh
-
-ELF2SBPF_BIN=/tmp/elf2sbpf-peephole.sh ./test-zig-elf2sbpf.sh token
-```
-
-The CU columns labeled "Zig (stock Zig + elf2sbpf `--peephole`)"
-below show the numbers measured with this wrapper. See
-[`DaviRain-Su/elf2sbpf`](https://github.com/DaviRain-Su/elf2sbpf)
-§D.7.10 for the full design and scope.
+For Zig programs that want optimal CU, use the solana-zig fork —
+see the section below.
 
 #### Using a modern Zig 0.16 with `solana-zig` baseline CU
 
@@ -254,7 +237,6 @@ Logs a static string using the `sol_log_` syscall.
 | Zig | 105 |
 | Zig (solana-zig-fork-0.16) | 105 |
 | Zig (stock Zig + elf2sbpf framework) | 105 |
-| Zig (stock Zig + elf2sbpf `--peephole`) | 105 |
 | C | 105 |
 | Assembly | 104 |
 
@@ -273,7 +255,6 @@ a little-endian u64 in instruction data.
 | Zig | 37 |
 | Zig (solana-zig-fork-0.16) | 37 |
 | Zig (stock Zig + elf2sbpf framework) | 60 |
-| Zig (stock Zig + elf2sbpf `--peephole`) | 39 |
 | C | 104 |
 | Assembly | 30 |
 | Rust (pinocchio) | 27 |
@@ -295,7 +276,6 @@ address and `invoke_signed` to CPI to the system program.
 | Zig | 2967 | 309 |
 | Zig (solana-zig-fork-0.16) | 2967 | 309 |
 | Zig (stock Zig + elf2sbpf framework) | 2818 | 318 |
-| Zig (stock Zig + elf2sbpf `--peephole`) | 2818 | 318 |
 | C | 3122 | 622 |
 | Rust (pinocchio) | 2771 | 271 |
 
@@ -314,7 +294,6 @@ on-chain programs, but it can be expensive.
 | Zig | 15 |
 | Zig (solana-zig-fork-0.16) | 15 |
 | Zig (stock Zig + elf2sbpf framework) | 187 |
-| Zig (stock Zig + elf2sbpf `--peephole`) | 19 |
 
 ### Token
 
@@ -330,7 +309,6 @@ program.
 | Zig | 142 |
 | Zig (solana-zig-fork-0.16) | 142 |
 | Zig (stock Zig + elf2sbpf framework) | 516 |
-| Zig (stock Zig + elf2sbpf `--peephole`) | 348 |
 
   * Initialize Account
 
@@ -340,7 +318,6 @@ program.
 | Zig | 158 |
 | Zig (solana-zig-fork-0.16) | 158 |
 | Zig (stock Zig + elf2sbpf framework) | 491 |
-| Zig (stock Zig + elf2sbpf `--peephole`) | 365 |
 
   * Mint To
 
@@ -350,7 +327,6 @@ program.
 | Zig | 133 |
 | Zig (solana-zig-fork-0.16) | 133 |
 | Zig (stock Zig + elf2sbpf framework) | 448 |
-| Zig (stock Zig + elf2sbpf `--peephole`) | 364 |
 
   * Transfer
 
@@ -360,7 +336,6 @@ program.
 | Zig | 124 |
 | Zig (solana-zig-fork-0.16) | 124 |
 | Zig (stock Zig + elf2sbpf framework) | 572 |
-| Zig (stock Zig + elf2sbpf `--peephole`) | 486 |
 
   * Burn
 
@@ -370,7 +345,6 @@ program.
 | Zig | 123 |
 | Zig (solana-zig-fork-0.16) | 123 |
 | Zig (stock Zig + elf2sbpf framework) | 452 |
-| Zig (stock Zig + elf2sbpf `--peephole`) | 280 |
 
   * Close Account
 
@@ -380,4 +354,3 @@ program.
 | Zig | 114 |
 | Zig (solana-zig-fork-0.16) | 114 |
 | Zig (stock Zig + elf2sbpf framework) | 236 |
-| Zig (stock Zig + elf2sbpf `--peephole`) | 194 |
