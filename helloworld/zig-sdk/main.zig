@@ -4,6 +4,6 @@ fn processInstruction(_: *sol.entrypoint.InstructionContext(2)) sol.ProgramResul
     sol.log.log("Hello world!");
 }
 
-export fn entrypoint(input: [*]u8) u64 {
+export fn entrypoint(input: [*]align(8) u8) u64 {
     return sol.entrypoint.lazyEntrypointMax(2, processInstruction)(input);
 }

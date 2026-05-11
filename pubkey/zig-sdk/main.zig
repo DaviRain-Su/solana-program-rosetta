@@ -1,14 +1,14 @@
 const sol = @import("solana_program_sdk");
 
-fn processInstruction(context: *sol.entrypoint.InstructionContext(1)) sol.ProgramResult {
-    if (context.remaining() < 1) return error.NotEnoughAccountKeys;
+export fn entrypoint(input: [*]align(8) u8) u64 {
+    // Skip num_accounts (8 bytes) + dup_marker (8 bytes)
+    const account_start = input + 16;
+    const key: *const sol.Pubkey = @ptrCast(account_start);
+    const owner: *const sol.Pubkey = @ptrCast(account_start + 32);
 
-    const account = context.nextAccountEx(.unchecked);
-    if (!sol.pubkey.pubkeyEqAligned(account.key(), account.owner())) {
-        return error.InvalidArgument;
+    if (!sol.pubkey.pubkeyEqAligned(key, owner)) {
+        return 1;
     }
-}
 
-export fn entrypoint(input: [*]u8) u64 {
-    return sol.entrypoint.lazyEntrypointMax(1, processInstruction)(input);
+    return 0;
 }

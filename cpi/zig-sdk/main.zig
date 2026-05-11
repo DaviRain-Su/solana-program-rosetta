@@ -45,10 +45,10 @@ fn processInstruction(context: *sol.entrypoint.InstructionContext(2)) sol.Progra
         .data = &data,
     };
 
-    const infos = [_]sol.AccountInfo{ allocated, system_program };
+    const infos = [_]sol.AccountInfo{ allocated.*, system_program.* };
     try sol.cpi.invokeSigned(&instruction, &infos, &signer_seeds);
 }
 
-export fn entrypoint(input: [*]u8) u64 {
+export fn entrypoint(input: [*]align(8) u8) u64 {
     return sol.entrypoint.lazyEntrypointMax(2, processInstruction)(input);
 }
