@@ -1,0 +1,16 @@
+.{
+    .fingerprint = 0x40f984d15d12c7f6,
+    .name = .rosetta_cpi_zig_sdk,
+    .version = "0.1.0",
+    .minimum_zig_version = "0.16.0",
+    .dependencies = .{
+        .solana_program_sdk = .{
+            .path = "../../../solana-program-sdk-zig",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "main.zig",
+    },
+}
