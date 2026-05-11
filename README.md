@@ -72,59 +72,6 @@ SBF_OUT_DIR="./zig/zig-out/lib" cargo test
 ./test-zig.sh helloworld
 ```
 
-#### Stock Zig + `elf2sbpf` comparison path
-
-This repo also includes comparison builds for a subset of Zig programs using:
-
-- stock Zig 0.16
-- `solana-program-sdk-zig` pinned to the `solana-zig-fork-0.16` branch
-  (commit `5b74dc78948d68640aa21d62d882d6c4b0e23af8`); that SDK exposes
-  both `buildProgram` (solana-zig fork path) and `buildProgramElf2sbpf`
-  (stock Zig path) — these dirs use the latter
-- `elf2sbpf` as the final ELF `.o` → Solana `.so` post-processor
-
-Currently wired programs:
-
-- `helloworld`
-- `pubkey`
-- `transfer-lamports`
-- `cpi`
-- `token`
-
-Expected local tool setup:
-
-```text
-../elf2sbpf
-```
-
-The Zig package dependency on `solana-program-sdk-zig` is fetched automatically
-from GitHub; only the `elf2sbpf` binary itself is expected locally by default
-unless you set `ELF2SBPF_BIN` explicitly.
-
-Then run:
-
-```console
-./test-zig-elf2sbpf.sh helloworld
-./test-zig-elf2sbpf.sh pubkey
-./test-zig-elf2sbpf.sh transfer-lamports
-./test-zig-elf2sbpf.sh cpi
-./test-zig-elf2sbpf.sh token
-```
-
-These tests reuse each program's existing Rust functional tests. For `token`,
-the per-instruction CU numbers below were re-checked with the existing
-`assert_instruction_count` integration tests.
-
-Earlier versions of elf2sbpf shipped an opt-in `--peephole` pass that
-rewrote byte-wise `load/store i64 align 1` expansions back to
-`ldxdw`/`stxdw`. It was rolled back 2026-04-19 (miscompile on
-zignocchio escrow); if you see old `Zig (stock Zig + elf2sbpf
---peephole)` CU numbers around, they are historical and not
-reproducible from current elf2sbpf.
-
-For Zig programs that want optimal CU, use the solana-zig fork —
-see the section below.
-
 #### Using a modern Zig 0.16 with `solana-zig` baseline CU
 
 The `solana-zig` tarball fetched by `install-solana-zig.sh` is the
@@ -236,7 +183,6 @@ Logs a static string using the `sol_log_` syscall.
 | Rust | 105 |
 | Zig | 105 |
 | Zig (solana-zig-fork-0.16) | 105 |
-| Zig (stock Zig + elf2sbpf framework) | 105 |
 | C | 105 |
 | Assembly | 104 |
 
@@ -254,7 +200,6 @@ a little-endian u64 in instruction data.
 | Rust | 459 |
 | Zig | 37 |
 | Zig (solana-zig-fork-0.16) | 37 |
-| Zig (stock Zig + elf2sbpf framework) | 60 |
 | C | 104 |
 | Assembly | 30 |
 | Rust (pinocchio) | 27 |
@@ -275,7 +220,6 @@ address and `invoke_signed` to CPI to the system program.
 | Rust | 3698 | 1198 |
 | Zig | 2967 | 309 |
 | Zig (solana-zig-fork-0.16) | 2967 | 309 |
-| Zig (stock Zig + elf2sbpf framework) | 2818 | 318 |
 | C | 3122 | 622 |
 | Rust (pinocchio) | 2771 | 271 |
 
@@ -293,7 +237,6 @@ on-chain programs, but it can be expensive.
 | Rust | 14 |
 | Zig | 15 |
 | Zig (solana-zig-fork-0.16) | 15 |
-| Zig (stock Zig + elf2sbpf framework) | 187 |
 
 ### Token
 
@@ -308,7 +251,6 @@ program.
 | Rust | 1115 |
 | Zig | 142 |
 | Zig (solana-zig-fork-0.16) | 142 |
-| Zig (stock Zig + elf2sbpf framework) | 516 |
 
   * Initialize Account
 
@@ -317,7 +259,6 @@ program.
 | Rust | 2071 |
 | Zig | 158 |
 | Zig (solana-zig-fork-0.16) | 158 |
-| Zig (stock Zig + elf2sbpf framework) | 491 |
 
   * Mint To
 
@@ -326,7 +267,6 @@ program.
 | Rust | 2189 |
 | Zig | 133 |
 | Zig (solana-zig-fork-0.16) | 133 |
-| Zig (stock Zig + elf2sbpf framework) | 448 |
 
   * Transfer
 
@@ -335,7 +275,6 @@ program.
 | Rust | 2208 |
 | Zig | 124 |
 | Zig (solana-zig-fork-0.16) | 124 |
-| Zig (stock Zig + elf2sbpf framework) | 572 |
 
   * Burn
 
@@ -344,7 +283,6 @@ program.
 | Rust | 2045 |
 | Zig | 123 |
 | Zig (solana-zig-fork-0.16) | 123 |
-| Zig (stock Zig + elf2sbpf framework) | 452 |
 
   * Close Account
 
@@ -353,4 +291,3 @@ program.
 | Rust | 1483 |
 | Zig | 114 |
 | Zig (solana-zig-fork-0.16) | 114 |
-| Zig (stock Zig + elf2sbpf framework) | 236 |
