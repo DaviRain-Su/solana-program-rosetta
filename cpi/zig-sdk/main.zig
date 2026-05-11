@@ -11,7 +11,7 @@ extern fn sol_create_program_address(
     address_ptr: *sol.Pubkey,
 ) callconv(.c) u64;
 
-fn processInstruction(context: *sol.entrypoint.InstructionContext) sol.ProgramResult {
+fn processInstruction(context: *sol.entrypoint.InstructionContext(2)) sol.ProgramResult {
     if (sol.entrypoint.unlikely(context.remaining() != 2)) {
         return error.NotEnoughAccountKeys;
     }
@@ -50,5 +50,5 @@ fn processInstruction(context: *sol.entrypoint.InstructionContext) sol.ProgramRe
 }
 
 export fn entrypoint(input: [*]u8) u64 {
-    return sol.entrypoint.lazyEntrypoint(processInstruction)(input);
+    return sol.entrypoint.lazyEntrypointMax(2, processInstruction)(input);
 }
