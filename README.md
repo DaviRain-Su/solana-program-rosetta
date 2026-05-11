@@ -72,6 +72,43 @@ SBF_OUT_DIR="./zig/zig-out/lib" cargo test
 ./test-zig.sh helloworld
 ```
 
+#### Zig SDK (new API)
+
+This repo also includes programs built with a new `solana-program-sdk-zig`
+that provides a higher-level, safer API with lazy account parsing and
+compile-time safety levels:
+
+* Get the compiler (same as above)
+* Go to the Zig SDK implementation
+
+```console
+cd helloworld/zig-sdk
+```
+
+* Build the program
+
+```console
+../../solana-zig/zig build
+```
+
+* Test it
+
+```console
+cd ..
+SBF_OUT_DIR="./zig-sdk/zig-out/lib" cargo test
+```
+
+* OR use the helper
+
+```console
+./test-zig-sdk.sh helloworld
+```
+
+The Zig SDK uses `lazyEntrypointMax` with `InstructionContext` for
+on-demand account parsing. This provides better abstraction and safety
+but has slightly higher CU overhead for very simple programs compared
+to the raw Zig path. See CU comparison tables below.
+
 #### Using a modern Zig 0.16 with `solana-zig` baseline CU
 
 The `solana-zig` tarball fetched by `install-solana-zig.sh` is the
@@ -182,6 +219,7 @@ Logs a static string using the `sol_log_` syscall.
 | --- | --- |
 | Rust | 105 |
 | Zig | 105 |
+| Zig (SDK) | 105 |
 | C | 105 |
 | Assembly | 104 |
 
@@ -198,6 +236,7 @@ a little-endian u64 in instruction data.
 | --- | --- |
 | Rust | 459 |
 | Zig | 37 |
+| Zig (SDK) | 153 |
 | C | 104 |
 | Assembly | 30 |
 | Rust (pinocchio) | 27 |
@@ -217,6 +256,7 @@ address and `invoke_signed` to CPI to the system program.
 | --- | --- | --- |
 | Rust | 3698 | 1198 |
 | Zig | 2967 | 309 |
+| Zig (SDK) | 3069 | 411 |
 | C | 3122 | 622 |
 | Rust (pinocchio) | 2771 | 271 |
 
@@ -233,6 +273,7 @@ on-chain programs, but it can be expensive.
 | --- | --- |
 | Rust | 14 |
 | Zig | 15 |
+| Zig (SDK) | 24 |
 
 ### Token
 
