@@ -135,7 +135,7 @@ fork of `solana-zig-bootstrap` that ports Zig forward to
 `0.16.0-dev.0+cf5f8113c` against the same LLVM 20 fork:
 
 ```console
-git clone -b solana-1.52-zig0.16 \
+git clone -b solana-1.53-zig0.16 \
   https://github.com/DaviRain-Su/solana-zig-bootstrap \
   ../solana-zig-bootstrap
 cd ../solana-zig-bootstrap
