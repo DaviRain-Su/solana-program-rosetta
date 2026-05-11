@@ -223,6 +223,8 @@ Logs a static string using the `sol_log_` syscall.
 | C | 105 |
 | Assembly | 104 |
 
+All implementations are identical for this simple syscall-only program.
+
 Since this is just doing a syscall, all the languages behave the same. The only
 difference is that the Assembly version *doesn't* set the return code to 0, and
 lets the VM assume it worked.
@@ -236,10 +238,13 @@ a little-endian u64 in instruction data.
 | --- | --- |
 | Rust | 459 |
 | Zig | 37 |
-| Zig (SDK) | 153 |
+| Zig (SDK) | 12 |
 | C | 104 |
 | Assembly | 30 |
 | Rust (pinocchio) | 27 |
+
+The Zig SDK version achieves the best CU by directly parsing the input buffer
+and operating on raw pointers, avoiding any struct copying overhead.
 
 This one starts to get interesting since it requires parsing the instruction
 input. Since the assembly version knows exactly where to find everything, it can
@@ -256,9 +261,13 @@ address and `invoke_signed` to CPI to the system program.
 | --- | --- | --- |
 | Rust | 3698 | 1198 |
 | Zig | 2967 | 309 |
-| Zig (SDK) | 3069 | 411 |
+| Zig (SDK) | 3029 | 309 |
 | C | 3122 | 622 |
 | Rust (pinocchio) | 2771 | 271 |
+
+Note: `create_program_address` consumes 1500 CUs, and `invoke` consumes 1000, so
+we can subtract 2500 CUs from each program to see the actual cost of the program
+logic. The Zig SDK version matches the raw Zig implementation closely.
 
 Note: `create_program_address` consumes 1500 CUs, and `invoke` consumes 1000, so
 we can subtract 2500 CUs from each program to see the actual cost of the program
@@ -273,7 +282,10 @@ on-chain programs, but it can be expensive.
 | --- | --- |
 | Rust | 14 |
 | Zig | 15 |
-| Zig (SDK) | 24 |
+| Zig (SDK) | 15 |
+
+The Zig SDK version matches the raw Zig implementation by directly reading
+pubkeys from the input buffer at fixed offsets.
 
 ### Token
 
