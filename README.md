@@ -182,7 +182,6 @@ Logs a static string using the `sol_log_` syscall.
 | --- | --- |
 | Rust | 105 |
 | Zig | 105 |
-| Zig (solana-zig-fork-0.16) | 105 |
 | C | 105 |
 | Assembly | 104 |
 
@@ -199,7 +198,6 @@ a little-endian u64 in instruction data.
 | --- | --- |
 | Rust | 459 |
 | Zig | 37 |
-| Zig (solana-zig-fork-0.16) | 37 |
 | C | 104 |
 | Assembly | 30 |
 | Rust (pinocchio) | 27 |
@@ -219,7 +217,6 @@ address and `invoke_signed` to CPI to the system program.
 | --- | --- | --- |
 | Rust | 3698 | 1198 |
 | Zig | 2967 | 309 |
-| Zig (solana-zig-fork-0.16) | 2967 | 309 |
 | C | 3122 | 622 |
 | Rust (pinocchio) | 2771 | 271 |
 
@@ -236,7 +233,6 @@ on-chain programs, but it can be expensive.
 | --- | --- |
 | Rust | 14 |
 | Zig | 15 |
-| Zig (solana-zig-fork-0.16) | 15 |
 
 ### Token
 
@@ -250,7 +246,6 @@ program.
 | --- | --- |
 | Rust | 1115 |
 | Zig | 142 |
-| Zig (solana-zig-fork-0.16) | 142 |
 
   * Initialize Account
 
@@ -258,7 +253,6 @@ program.
 | --- | --- |
 | Rust | 2071 |
 | Zig | 158 |
-| Zig (solana-zig-fork-0.16) | 158 |
 
   * Mint To
 
@@ -266,7 +260,6 @@ program.
 | --- | --- |
 | Rust | 2189 |
 | Zig | 133 |
-| Zig (solana-zig-fork-0.16) | 133 |
 
   * Transfer
 
@@ -274,7 +267,6 @@ program.
 | --- | --- |
 | Rust | 2208 |
 | Zig | 124 |
-| Zig (solana-zig-fork-0.16) | 124 |
 
   * Burn
 
@@ -282,7 +274,6 @@ program.
 | --- | --- |
 | Rust | 2045 |
 | Zig | 123 |
-| Zig (solana-zig-fork-0.16) | 123 |
 
   * Close Account
 
@@ -290,4 +281,3 @@ program.
 | --- | --- |
 | Rust | 1483 |
 | Zig | 114 |
-| Zig (solana-zig-fork-0.16) | 114 |
